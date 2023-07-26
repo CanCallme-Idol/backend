@@ -5,6 +5,8 @@ node_modules/
 Lib/
 include/
 Scripts/
+venv/
+staroasis/star/
 /.pnp
 .pnp.js
 
