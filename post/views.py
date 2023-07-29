@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from rest_framework import generics
 from star.staroasis import base_model
 from .models import Post
@@ -45,10 +45,19 @@ def face_service(request):
         
         img = request.FILES.get('file')
         
-        img_path = default_storage.save('./star/' + img.name, img)
+        img_path = default_storage.save('./star/userface/' + img.name, img)
         print(img_path)
+        print(img.name)
         
-        t,p,i = base_model(img_path)
+        try:
+            t,p,i = base_model(img_path)
+        except Exception as e:
+            result = {
+                'errorMessage' : e.args,
+            }
+            print("오류내용 : ",e.args)
+            return Response(result)
+        
         print(f'당신이 {t}상일 확률은 {p}입니다!')
         print(f'특히 {i} 아티스트를 가장 닮았습니다')
         
