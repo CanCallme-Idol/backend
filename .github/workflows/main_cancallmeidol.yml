@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'cancallmeidol'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1B5709DE20A345CFB69EC7918469094B }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9CACBDA2BA5144B09289CDD83C10D145 }}
