@@ -63,6 +63,6 @@ jobs:
           app-name: 'cancallmeidol'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9FFA14D379BE4C21B85EDBDF920B4F18 }}
-          startup-command: python manage.py runserver
+          startup-command: 'python manage.py runserver'
           
           
