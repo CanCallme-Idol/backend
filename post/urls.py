@@ -5,5 +5,6 @@ from . import views
 urlpatterns = [
     path('', views.ListPost.as_view()),
     path('<int:pk>/', views.DetailPost.as_view()),
-    path('face',views.face_service)
+    path('face',views.face_service),
+    path('test',views.apitest),
 ]

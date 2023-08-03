@@ -25,12 +25,13 @@ SECRET_KEY = "django-insecure-v(j8#!l&cabd@mpn!2!+43qu1njdykq7ly-*n6ijn8jhz9dmmo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", ".cloudtype.app"]
-CSRF_TRUSTED_ORIGINS = ['https://*.cloudtype.app']
+ALLOWED_HOSTS = [".ngrok-free.app","localhost", "127.0.0.1", ".cloudtype.app",".loca.lt"]
+CSRF_TRUSTED_ORIGINS = ['https://*.cloudtype.app',"https://*.ngrok-free.app","https://*.loca.lt"]
 
 # Application definition
 
 INSTALLED_APPS = [
+    "corsheaders",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -39,7 +40,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "post",
     "rest_framework",
-    "corsheaders",
 ]
 
 MIDDLEWARE = [
@@ -55,7 +55,8 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-
+# CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ALLOW_CREDENTIALS = False
 
 ROOT_URLCONF = "staroasis.urls"
 
@@ -142,5 +143,10 @@ REST_FRAMEWORK = {
 }
 
 CORS_ORIGIN_WHITELIST = [
-    'http://localhost:3000'
+    'https://web-aiclient-eg4e2alkk7tdn0.sel4.cloudtype.app',
+    'https://8db3-1-241-85-168.ngrok-free.app',
+    'http://localhost:3000',
+    'https://0fd1-1-241-85-168.ngrok-free.app'
+    
+    
 ]

@@ -70,7 +70,10 @@ def face_service(request):
     return Response(result)
 
 
-
+@api_view(['POST'])
+def apitest(request):
+    if request.method == 'POST':
+        return Response("연결 됨~~~connect~!~!")
 
 
 

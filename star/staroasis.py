@@ -8,8 +8,9 @@ def avg_score(score,num):
   else:
     return sum(score)/len(score)
 
-def softmax(x):  
-    f_x = np.exp(x) / np.sum(np.exp(x))
+def softmax(x):
+    epsilon = 1e-5  
+    f_x = np.exp(x) / (np.sum(np.exp(x)) + epsilon)
     return f_x
 def valid_face(path):
   # Load the cascade
@@ -19,11 +20,11 @@ def valid_face(path):
   # Convert into grayscale
   gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
   # Detect faces
-  faces = face_cascade.detectMultiScale(gray, 1.1, 10)
+  faces = face_cascade.detectMultiScale(gray, 1.1, 20)
   if len(faces)==0:
-    raise Exception('얼굴이 보이지 않아요. 다른 사진으로 시도해보세요')
+    raise Exception('face not detected. Please use another image!')
   if len(faces)>1:
-    raise Exception('얼굴이 여러 개가 보이는 것 같아요. 하나의 얼굴이 나온 사진이 필요해요!')
+    raise Exception('Only one faces will be accepted. Please use another image!')
   
 def base_model(image):
   valid_face(image)
@@ -46,14 +47,15 @@ def base_model(image):
                 db_path = "star/yg",    # folder containing all the images
                 model_name = 'ArcFace',
                 enforce_detection = False)[0]
+  
   lst = ['jyp','hybe','yg','sm']
-  data = [-avg_score(jyp['ArcFace_cosine'],3),-avg_score(hybe['ArcFace_cosine'],3),-avg_score(yg['ArcFace_cosine'],3),-avg_score(sm['ArcFace_cosine'],3)]
-  target = lst[np.argmin(data)]
-  probabilities = softmax(data)[np.argmin(data)]
+  data = [-avg_score(jyp['ArcFace_cosine'],5),-avg_score(hybe['ArcFace_cosine'],5),-avg_score(yg['ArcFace_cosine'],5),-avg_score(sm['ArcFace_cosine'],5)]
+  target = lst[np.argmax(data)]
+  probabilities = softmax(data)[np.argmax(data)]
   identity = eval(target)['identity'][0].split('/')[-1].split('_')[0]
   return target, probabilities,identity
 
 if __name__ == '__main__':
-    t, p,i = base_model('jyp/hide.jpg')
+    t, p,i = base_model('jyp/sohi2.jpg')
     print(f'당신이 {t}상일 확률은 {p}입니다!')
     print(f'특히 {i} 아티스트를 가장 닮았습니다')

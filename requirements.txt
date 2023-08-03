@@ -60,7 +60,6 @@ tensorboard==2.13.0
 tensorboard-data-server==0.7.1
 tensorflow==2.13.0
 tensorflow-estimator==2.13.0
-tensorflow-intel==2.13.0
 tensorflow-io-gcs-filesystem==0.31.0
 termcolor==2.3.0
 torch==2.0.1
@@ -70,4 +69,5 @@ tzdata==2023.3
 urllib3==1.26.16
 Werkzeug==2.3.6
 wrapt==1.15.0
+whitenoise
 zipp==3.16.2
