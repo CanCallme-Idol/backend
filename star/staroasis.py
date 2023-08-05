@@ -1,7 +1,7 @@
 from deepface import DeepFace
 import numpy as np
 import cv2
-
+from mtcnn import MTCNN
 def avg_score(score,num):
   if len(score)>=num:
     return sum(score[:num])/num
@@ -13,22 +13,24 @@ def softmax(x):
     f_x = np.exp(x) / (np.sum(np.exp(x)) + epsilon)
     return f_x
 def valid_face(path):
-  # Load the cascade
-  face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades +'haarcascade_frontalface_default.xml')
+  detector = MTCNN()
   # Read the input image
-  img = cv2.imread(path)
-  # Convert into grayscale
+  image = cv2.imread(path)
   try:
-    gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+    if image.shape[-1]>3:
+          image = cv2.cvtColor(image,cv2.COLOR_RGBA2RGB)
+    # Detect faces in the image
+    faces = detector.detect_faces(image)
+    faces
   except:
-    raise Exception('이미지 경로가 올바르지않습니다')
-  # Detect faces
-  faces = face_cascade.detectMultiScale(gray, 1.1, 5)
-  if len(faces)==0:
-    raise Exception('face not detected. Please use another image!')
-  if len(faces)>1:
-    raise Exception('Only one faces will be accepted. Please use another image!')
-  
+    raise Exception('이미지 경로를 확인해주세요.')
+  if len(faces)==1:
+        pass
+  elif len(faces)>1:
+    raise Exception('두명의 이미지는 분석이 불가능합니다.')
+  else:
+    raise Exception('얼굴이 검출되지 않았습니다.')
+
 def base_model(image):
   valid_face(image)
   hybe = DeepFace.find(img_path = image,    # the image to compare against
@@ -59,6 +61,6 @@ def base_model(image):
   return target, probabilities,identity
 
 if __name__ == '__main__':
-    t, p,i = base_model('jyp/hide.jpg')
+    t, p,i = base_model('jyp/suzi.jpg')
     print(f'당신이 {t}상일 확률은 {p}입니다!')
     print(f'특히 {i} 아티스트를 가장 닮았습니다')
