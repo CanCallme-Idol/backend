@@ -2,6 +2,8 @@ from deepface import DeepFace
 import numpy as np
 import cv2
 from mtcnn import MTCNN
+from random import randrange
+import os
 def avg_score(score,num):
   if len(score)>=num:
     return sum(score[:num])/num
@@ -15,7 +17,9 @@ def softmax(x):
 def valid_face(path):
   detector = MTCNN()
   # Read the input image
-  image = cv2.imread(path)
+  image =  cv2.imdecode(np.fromfile(path, dtype=np.uint8), cv2.IMREAD_COLOR)
+  name = path.split('.')[0]
+  tmp_path = f'{randrange(10000)}_tmp.jpg'
   try:
     if image.shape[-1]>3:
           image = cv2.cvtColor(image,cv2.COLOR_RGBA2RGB)
@@ -25,30 +29,34 @@ def valid_face(path):
   except:
     raise Exception('이미지 경로를 확인해주세요.')
   if len(faces)==1:
-        pass
+    result = cv2.imwrite(tmp_path, image)
+    if result:
+      return tmp_path
+    else:
+      raise Exception('Valid_face후에 이미지가 저장되지 않았습니다.')
   elif len(faces)>1:
     raise Exception('두명의 이미지는 분석이 불가능합니다.')
   else:
     raise Exception('얼굴이 검출되지 않았습니다.')
 
 def base_model(image):
-  valid_face(image)
-  hybe = DeepFace.find(img_path = image,    # the image to compare against
+  path = valid_face(image)
+  hybe = DeepFace.find(img_path = path,    # the image to compare against
               db_path = "star/hybe",    # folder containing all the images
               model_name = 'ArcFace',
               enforce_detection = False)[0]
 
-  sm = DeepFace.find(img_path = image,    # the image to compare against
+  sm = DeepFace.find(img_path = path,    # the image to compare against
                 db_path = "star/sm",    # folder containing all the images
                 model_name = 'ArcFace',
                 enforce_detection = False)[0]
 
-  jyp = DeepFace.find(img_path = image,    # the image to compare against
+  jyp = DeepFace.find(img_path = path,    # the image to compare against
                 db_path = "star/jyp",    # folder containing all the images
                 model_name = 'ArcFace',
                 enforce_detection = False)[0]
 
-  yg = DeepFace.find(img_path = image,    # the image to compare against
+  yg = DeepFace.find(img_path = path,    # the image to compare against
                 db_path = "star/yg",    # folder containing all the images
                 model_name = 'ArcFace',
                 enforce_detection = False)[0]
@@ -58,9 +66,10 @@ def base_model(image):
   target = lst[np.argmax(data)]
   probabilities = softmax(data)[np.argmax(data)] + (softmax(data)[np.argmax(data)]-0.25)*10
   identity = eval(target)['identity'][0].split('/')[-1].split('_')[0]
+  os.remove(path)
   return target, probabilities,identity
 
 if __name__ == '__main__':
-    t, p,i = base_model('jyp/suzi.jpg')
+    t, p,i = base_model('한글.jpeg')
     print(f'당신이 {t}상일 확률은 {p}입니다!')
     print(f'특히 {i} 아티스트를 가장 닮았습니다')
