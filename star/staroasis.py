@@ -42,22 +42,22 @@ def valid_face(path):
 def base_model(image):
   path = valid_face(image)
   hybe = DeepFace.find(img_path = path,    # the image to compare against
-              db_path = "hybe",    # folder containing all the images
+              db_path = "star/hybe",    # folder containing all the images
               model_name = 'ArcFace',
               enforce_detection = False)[0]
 
   sm = DeepFace.find(img_path = path,    # the image to compare against
-                db_path = "sm",    # folder containing all the images
+                db_path = "star/sm",    # folder containing all the images
                 model_name = 'ArcFace',
                 enforce_detection = False)[0]
 
   jyp = DeepFace.find(img_path = path,    # the image to compare against
-                db_path = "jyp",    # folder containing all the images
+                db_path = "star/jyp",    # folder containing all the images
                 model_name = 'ArcFace',
                 enforce_detection = False)[0]
 
   yg = DeepFace.find(img_path = path,    # the image to compare against
-                db_path = "yg",    # folder containing all the images
+                db_path = "star/yg",    # folder containing all the images
                 model_name = 'ArcFace',
                 enforce_detection = False)[0]
   
